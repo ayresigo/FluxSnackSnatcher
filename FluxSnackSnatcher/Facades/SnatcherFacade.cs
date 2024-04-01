@@ -17,11 +17,13 @@ namespace FluxSnackSnatcher.Facades
         {
             try
             {
-                string unescapedUrl = Uri.UnescapeDataString(url);
+                var unescapedUrl = Uri.UnescapeDataString(url);
 
                 var sections = unescapedUrl.Split("/");
 
                 url = sections[2];
+
+                var unescapedSnacks = Uri.UnescapeDataString(snacks);
 
                 Console.WriteLine($"Snatching snacks from {url}");
 
@@ -36,7 +38,7 @@ namespace FluxSnackSnatcher.Facades
                             ServerUrl = url,
                             Name = Constants.FLUX_COOKIE_NAME,
                             Value = match.Groups[1].Value,
-                            AddedAt = DateTime.Now
+                            AddedAt = DateTime.Now.AddHours(-3)
                         };
 
                         var response = await _firebaseService.SetCookie(cookie);

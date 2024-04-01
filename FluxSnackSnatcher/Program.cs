@@ -63,15 +63,12 @@ public static class Program
 
         var app = builder.Build();
 
-        //if (app.Environment.IsDevelopment())
-        //{
-        //    //app.UseAuthentication();
-        //    app.UseSwagger();
-        //    app.UseSwaggerUI();
-        //}
-
-        app.UseSwagger();
-        app.UseSwaggerUI();
+        if (app.Environment.IsDevelopment())
+        {
+            //app.UseAuthentication();
+            app.UseSwagger();
+            app.UseSwaggerUI();
+        }
 
         app.UseHttpsRedirection();
 

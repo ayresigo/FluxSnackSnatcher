@@ -1,4 +1,5 @@
-﻿using Firebase.Database;
+﻿using Discord.Webhook;
+using Firebase.Database;
 using FluxSnackSnatcher.Facades;
 using FluxSnackSnatcher.Services;
 using FluxSnackSnatcher.Settings;
@@ -12,12 +13,23 @@ namespace FluxSnackSnatcher.Extensions
             var settings = configuration.GetSection("ApiSettings").Get<ApiSettings>();
 
             services.AddSnatcherServices();
+            services.AddDiscordServices(settings);
             services.AddFirebaseServices(settings);
         }
 
         public static void AddSnatcherServices(this IServiceCollection services)
         {
             services.AddScoped<ISnatcherFacade, SnatcherFacade>();
+        }
+
+        public static void AddDiscordServices(this IServiceCollection services, ApiSettings settings)
+        {
+            services.AddScoped(serviceProvider =>
+            {
+                return new DiscordWebhookClient(settings.DiscordWebhook.Id, settings.DiscordWebhook.Token);
+            });
+
+            services.AddScoped<IDiscordService, DiscordService>();
         }
 
         public static void AddFirebaseServices(this IServiceCollection services, ApiSettings settings)

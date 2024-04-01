@@ -5,5 +5,7 @@
         public int Port { get; set; }
 
         public FireBaseSettings FireBase { get; set; }
+
+        public DiscordSettings DiscordWebhook { get; set; }
     }
 }

@@ -19,9 +19,9 @@ namespace FluxSnackSnatcher.Controllers
         }
 
         [HttpGet("snacks")]
-        public async Task<ActionResult<IList<CookieData>>> GetSnacks()
+        public async Task<ActionResult<IDictionary<string, IList<CookieData>>>> GetSnacks()
         {
-            var snacks = await _snatcherFacade.GetSnacks();
+            var snacks = await _snatcherFacade.GetCookies();
 
             return Ok(snacks);
         }

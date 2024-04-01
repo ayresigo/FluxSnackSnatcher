@@ -38,7 +38,7 @@ namespace FluxSnackSnatcher.Facades
                             ServerUrl = url,
                             Name = Constants.FLUX_COOKIE_NAME,
                             Value = match.Groups[1].Value,
-                            AddedAt = DateTime.Now.AddHours(-3)
+                            AddedAt = DateTime.Now.AddHours(-3).ToString()
                         };
 
                         var response = await _firebaseService.SetCookie(cookie);
@@ -49,13 +49,15 @@ namespace FluxSnackSnatcher.Facades
 
                 return Constants.NO_IMAGE;
             }
-            catch (Exception)
+            catch (Exception ex)
             {
+                Console.WriteLine(ex.Message);
+
                 return Constants.NO_IMAGE;
             }
         }
 
-        public async Task<List<CookieData>> GetSnacks()
+        public async Task<IDictionary<string, IList<CookieData>>> GetCookies()
         {
             var snacks = await _firebaseService.GetCookies();
 

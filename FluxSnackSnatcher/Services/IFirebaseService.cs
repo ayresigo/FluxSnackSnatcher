@@ -6,6 +6,6 @@ namespace FluxSnackSnatcher.Services
     {
         public Task<string> SetCookie(CookieData cookie);
 
-        public Task<List<CookieData>> GetCookies();
+        public Task<IDictionary<string, IList<CookieData>>> GetCookies();
     }
 }

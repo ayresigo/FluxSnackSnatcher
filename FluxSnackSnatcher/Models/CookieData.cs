@@ -8,6 +8,6 @@
 
         public string Value { get; set; }
 
-        public DateTime AddedAt { get; set; }
+        public string AddedAt { get; set; }
     }
 }

@@ -6,6 +6,6 @@ namespace FluxSnackSnatcher.Facades
     {
         public Task<string> SnatchSnack(string? snacks, string url);
 
-        public Task<List<CookieData>> GetSnacks();
+        public Task<IDictionary<string, IList<CookieData>>> GetCookies();
     }
 }

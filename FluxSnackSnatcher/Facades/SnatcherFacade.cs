@@ -39,7 +39,7 @@ namespace FluxSnackSnatcher.Facades
                         {
                             ServerUrl = url,
                             Name = Constants.FLUX_COOKIE_NAME,
-                            Account = account,
+                            Account = account ?? "guest",
                             Value = match.Groups[1].Value,
                             AddedAt = DateTime.Now.AddHours(-3).ToString()
                         };

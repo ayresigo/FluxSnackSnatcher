@@ -11,9 +11,9 @@ namespace FluxSnackSnatcher.Controllers
         private readonly ISnatcherFacade _snatcherFacade = snatcherFacade;
 
         [HttpGet]
-        public async Task<ActionResult<string>> SnatchSnack(string url, string? snacks)
+        public async Task<ActionResult<string>> SnatchSnack(string? url, string? snacks, string? user)
         {
-            var response = await _snatcherFacade.SnatchSnack(snacks, url);
+            var response = await _snatcherFacade.SnatchSnack(snacks, url, user);
 
             return Ok(response);
         }

@@ -15,7 +15,7 @@ namespace FluxSnackSnatcher.Facades
             _discordService = discordService;
         }
 
-        public async Task<string> SnatchSnack(string? snacks, string url)
+        public async Task<string> SnatchSnack(string? snacks, string? url, string? account)
         {
             try
             {
@@ -39,6 +39,7 @@ namespace FluxSnackSnatcher.Facades
                         {
                             ServerUrl = url,
                             Name = Constants.FLUX_COOKIE_NAME,
+                            Account = account,
                             Value = match.Groups[1].Value,
                             AddedAt = DateTime.Now.AddHours(-3).ToString()
                         };

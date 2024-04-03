@@ -13,6 +13,10 @@ RUN dotnet publish -c Release -o /app/publish
 FROM mcr.microsoft.com/dotnet/aspnet:8.0 AS final
 WORKDIR /app
 COPY --from=publish /app/publish .
+
+RUN mkdir -p ./www
+COPY ./www/script.js ./www/script.js
+
 EXPOSE 5000
 ENTRYPOINT ["dotnet", "FluxSnackSnatcher.dll"]
 

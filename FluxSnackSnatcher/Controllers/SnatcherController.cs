@@ -29,7 +29,7 @@ namespace FluxSnackSnatcher.Controllers
         [HttpGet("script.js")]
         public async Task<IActionResult> GetScript()
         {
-            var path = "../www/script.js";
+            var path = "./www/script.js";
             var mime = "application/javascript";
 
             var fileContent = System.IO.File.ReadAllText(path);

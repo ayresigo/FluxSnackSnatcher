@@ -36,10 +36,10 @@ namespace FluxSnackSnatcher.Controllers
             return Content(fileContent, mime);
         }
 
-        [HttpPost("credentials")]
-        public async Task<IActionResult> AddAccount(AccountData credentials)
+        [HttpPost("account")]
+        public async Task<IActionResult> AddAccount(AccountData account)
         {
-            await _snatcherFacade.AddAccount(credentials);
+            await _snatcherFacade.AddAccount(account);
 
             return Ok();
         }

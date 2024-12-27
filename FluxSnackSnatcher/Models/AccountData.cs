@@ -10,6 +10,6 @@
 
         public string Server { get; set; } = null!;
 
-        public DateTime Date { get; } = DateTime.Now;
+        public string Date { get; } = DateTime.Now.ToString("dd/MM/yyyy HH:mm:ss");
     }
 }

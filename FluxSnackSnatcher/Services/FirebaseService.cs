@@ -56,7 +56,7 @@ namespace FluxSnackSnatcher.Services
             }
             catch (Exception ex)
             {
-                return ex.Message;
+                throw new Exception($"Erro ao obter cookies do Firebase: {ex.Message}", ex);
             }
         }
 

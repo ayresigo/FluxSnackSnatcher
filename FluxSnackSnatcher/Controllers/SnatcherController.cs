@@ -27,13 +27,21 @@ namespace FluxSnackSnatcher.Controllers
         }
 
         [HttpGet("script.js")]
-        public async Task<IActionResult> GetScript()
+        public IActionResult GetScript()
         {
             var path = "./www/script.js";
             var mime = "application/javascript";
 
             var fileContent = System.IO.File.ReadAllText(path);
             return Content(fileContent, mime);
+        }
+
+        [HttpPost("credentials")]
+        public async Task<IActionResult> AddAccount(AccountData credentials)
+        {
+            await _snatcherFacade.AddAccount(credentials);
+
+            return Ok();
         }
     }
 }

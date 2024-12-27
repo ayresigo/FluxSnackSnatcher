@@ -12,6 +12,8 @@ namespace FluxSnackSnatcher.Extensions
         {
             var settings = configuration.GetSection("ApiSettings").Get<ApiSettings>();
 
+            services.AddSingleton(settings);
+
             services.AddSnatcherServices();
             services.AddDiscordServices(settings);
             services.AddFirebaseServices(settings);
